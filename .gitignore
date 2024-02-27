@@ -1,0 +1,32 @@
+# Python
+*.pyc
+*.pyo
+/Cali_SMS_Backend/API/migrations/*.py
+*.pyd
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.log
+*.pot
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+*.pyc
+*.pyo
+*.pyd
+
+
+# Django migration files
+**/migrations/*.py
+**/migrations/*.pyc
+
+**/management/*.
+**/management/*.pyc
+**/migrations/.log
+**/migrations/*.pyc
+
+/venv/
