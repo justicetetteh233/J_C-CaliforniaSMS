@@ -1,0 +1,56 @@
+.mainpage{
+    border: 2px solid rgb(1, 0, 5);
+    width: fit-content;
+
+    .t-f{
+    font-weight: bold;
+    }
+
+    .t-a{
+        border-top: 2px solid red;
+        color: red;
+    }
+
+    .t-b{
+        border-top: 2px solid rgb(42, 6, 247);
+        border-bottom: 2px double rgb(42, 6, 247);
+        color: blue;
+
+    }
+
+    td{
+    text-align: center;
+    margin: 5px;
+    width: fit-content;
+    padding: 8px;
+    }
+    
+    .s-details{
+        /* border: 2px solid yellow;   */
+    }
+
+    .T-account{
+        border-top: 2px solid black;
+        display: flex;
+        /* border: 2px solid black; */
+        width: fit-content;
+    }
+
+    .Debt{
+        border-right: 2px solid black; 
+    }
+
+    .payments{
+        
+    }
+
+    span{
+        text-decoration:underline;
+    }
+
+    .heading{
+        font-family: sans-serif;
+        font-size: larger;
+
+    }
+}
