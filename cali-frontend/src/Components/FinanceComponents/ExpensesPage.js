@@ -1,8 +1,8 @@
 import React from "react";
 import StudentFinancialStatement  from "./financialreport"
 const ExpensesPage = () => {
-    const selectedTerm =3;
-    const selectedStudent = 1;
+    const selectedTerm =5;
+    const selectedStudent = 2;
   
     return (
       <div>

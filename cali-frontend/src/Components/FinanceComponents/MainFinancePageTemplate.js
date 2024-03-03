@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import FinanceTopNavBar from './FinanceTopNavBar'
 import  "../../Styles/FinanceComponentStyles/mainFinance.css"
-import PaymentsPage from './PaymentPage';
+import StudentsFeesPaymentPage from './StudentsFeesPaymentPage';
 import ExpensesPage from './ExpensesPage';
 import StaffFinance from './StaffFinance';
 import InventoryPage from './InventoryPage';
@@ -16,7 +16,7 @@ const FinanceWorkPage = ()  => {
             <switch>
             <Routes>
                 <Route index element={<StaffFinance/>}/>
-                <Route path="/payments" element={<PaymentsPage/>}/>  
+                <Route path="/payments" element={<StudentsFeesPaymentPage  selectedSchool={1}/>}/>  
                 <Route path="/expenses" element={<ExpensesPage/>}/> 
                 <Route path='/stafffinance' element={<StaffFinance/>}/>  
                 <Route path='/inventoriesManagement' element={<InventoryPage/>}/> 

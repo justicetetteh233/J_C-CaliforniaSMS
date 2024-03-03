@@ -88,6 +88,7 @@ const StudentFinancialStatement = ({ selectedTerm, selectedStudent }) => {
 
       <div>
         <span>Payments By Student</span>
+
         <table>
           <tr>
             <th>date</th>
@@ -111,43 +112,74 @@ const StudentFinancialStatement = ({ selectedTerm, selectedStudent }) => {
             <td></td>
             <td className='t-a'>{studentfinancialreport[1][2].totalpayments}</td>
           </tr>
-  
-          <span>Balances of Fee</span>
+       
 
-        <tr>
-          <th></th>
-          <th>Fee name</th>
-          <th> Balance GHC </th>
-        </tr>
-  
-        {studentfinancialreport[1][4].map((obj, index) => (
-        <tr key={index}>
-          <td></td>
-          {Object.entries(obj).map(([key, content]) => (
-          <td  key={key}>
-          {content}
-          </td>
-        ))}
-        </tr>
-        ))}
-        <tr>
-            <td>{currentDate.toLocaleString()}</td>
-            <td className='t-f'>{studentfinancialreport[1][5]["Total "]}</td>
+
+        <span>School Allowances Paid For Student</span>
+
+      
+          <tr>
+            <th>date</th>
+            <th>Fee name</th>
+            <th> Amount GHC </th>
+            <th>Credit Balances</th>
+          </tr>
+      
+          {studentfinancialreport[1][3].map((obj, index) => (
+          <tr key={index}>
+            {Object.entries(obj).map(([key, content]) => (
+            <td  key={key}>
+            {content}
+            </td>
+            ))}
+          </tr>
+          ))}
+          <tr>
             <td></td>
-            <td className='t-a'>{studentfinancialreport[1][5]["Total_Balance"]}</td>
-        </tr>
-        <td>
-          <td></td>
-          <td></td>
-          <td></td>
-          </td>
-        <tr>
-          <td></td>
-          <td className='t-f'>Total Credit</td>
-          <td></td>
-          <td className='t-b'>{studentfinancialreport[1][6]["TOTAL"]}</td>
-        </tr>
-      </table>
+            <td></td>
+            <td></td>
+            <td className='t-a'>{studentfinancialreport[1][4].totalpayments}</td>
+          </tr>
+      
+
+
+        <span>Balances of Fee</span>
+
+       
+          <tr>
+            <th></th>
+            <th>Fee name</th>
+            <th> Balance GHC </th>
+          </tr>
+    
+          {studentfinancialreport[1][6].map((obj, index) => (
+          <tr key={index}>
+            <td></td>
+            {Object.entries(obj).map(([key, content]) => (
+            <td  key={key}>
+            {content}
+            </td>
+          ))}
+          </tr>
+          ))}
+          <tr>
+              <td>{currentDate.toLocaleString()}</td>
+              <td className='t-f'>{studentfinancialreport[1][7]["Total "]}</td>
+              <td></td>
+              <td className='t-a'>{studentfinancialreport[1][7]["Total_Balance"]}</td>
+          </tr>
+          <td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </td>
+          <tr>
+            <td></td>
+            <td className='t-f'>Total Credit</td>
+            <td></td>
+            <td className='t-b'>{studentfinancialreport[1][8]["TOTAL"]}</td>
+          </tr>
+        </table>
       </div>
 
       </div>

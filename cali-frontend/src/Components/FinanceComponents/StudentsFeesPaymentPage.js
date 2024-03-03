@@ -1,3 +1,5 @@
+// use this component to enable payment of non daily fees 
+// <StudentsFeesPaymentPage  selectedSchool={id of the schoo is to be stored here}/>
 import React from "react";
 import axios from 'axios';
 import { useState, useEffect } from 'react'; 
@@ -5,7 +7,7 @@ import StudentFinancialStatement  from "./financialreport"
 import  "../../Styles/FinanceComponentStyles/PaymentPage.css"
 import { TextField, Button, Container, Stack, Select, MenuItem, FormControl, InputLabel, Typography, Snackbar } from '@mui/material';
 
-const PaymentsPage = () => {
+const StudentsFeesPaymentPage = ({selectedSchool}) => {
   const initialState = {
     "date":"",
     "student": "",
@@ -15,8 +17,6 @@ const PaymentsPage = () => {
   };
 
   const [formData, setFormData] = useState(initialState);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const [terms, setTerms] = useState([]);
   const [selectedTerm, setSelectedTerm] = useState('');
@@ -31,11 +31,20 @@ const PaymentsPage = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('');
+  
+
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/class-level/')
+    if (selectedSchool === ''){
+      axios.get('http://127.0.0.1:8000/api/class-level/')
       .then((response) => setClassLevels(response.data))
       .catch((error) => console.error('Error fetching class levels:', error));
+
+    }else{
+    axios.get(`http://127.0.0.1:8000/api/class-level/in_a_shool/${selectedSchool}/`)
+      .then((response) => setClassLevels(response.data))
+      .catch((error) => console.error('Error fetching class levels:', error));
+    }
   }, []);
 
   useEffect(() => {
@@ -220,4 +229,4 @@ const PaymentsPage = () => {
   );
 }
 
-export default PaymentsPage;
+export default StudentsFeesPaymentPage;
