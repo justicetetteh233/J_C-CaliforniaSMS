@@ -2,6 +2,7 @@
 *.pyc
 *.pyo
 /Cali_SMS_Backend/API/migrations/*.py
+/Cali_SMS_Backend/Api/Migrations/backup/
 *.pyd
 *.pyc
 *.pyo
@@ -9,6 +10,7 @@
 *.sqlite
 *.log
 *.pot
+cali-frontend/node_modules/
 
 # Django
 db.sqlite3

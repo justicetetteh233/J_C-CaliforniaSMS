@@ -1,23 +1,23 @@
-from .models import *
 from .serializer import *
-from math import *
+
 
 class report():
     def getTermDetail(self, term_id):
-        term = TermDetails.objects.get(pk= term_id)
+        term = TermDetails.objects.get(pk=term_id)
         termDetails = {
-            "id" : term.id,
-            "term_name" : term.term_name,
-            "term_opening_date" : term.term_opening_date,
-            "term_vacation_date" : term.term_vacation_date,
-            "next_term_reopening_date" : term.next_term_reopening_date,
-            "term_midterm_date" : term.term_midterm_date,
+            "id": term.id,
+            "term_name": term.term_name,
+            "term_opening_date": term.term_opening_date,
+            "term_vacation_date": term.term_vacation_date,
+            "next_term_reopening_date": term.next_term_reopening_date,
+            "term_midterm_date": term.term_midterm_date,
             "next_resume_reopening_date": term.next_resume_reopening_date,
-            "term_number_of_days" : term.term_number_of_days,
+            "term_number_of_days": term.term_number_of_days,
             "other_term_details": term.other_term_details
         }
         return termDetails
-    def reportdetails(self,student_id,term_details_id):
+
+    def reportdetails(self, student_id, term_details_id):
         student = Student.objects.get(pk=student_id)
         term_details = TermDetails.objects.get(pk=term_details_id)
         student_terminal_report_details = StudentTerminalReportDetails.objects.get(student=student,
@@ -32,7 +32,8 @@ class report():
             "Total attendance ": student_terminal_report_details.term_attendance
         }
         return response_data
-    def gradeAndRemarksProvider(self,total_marks):
+
+    def gradeAndRemarksProvider(self, total_marks):
         grade = "notdefined"
         remarks = "notdefined"
 
@@ -69,8 +70,9 @@ class report():
             grade = "F"
             remarks = "FAIL"
 
-        return {"grade" : grade , "remarks" : remarks}
-    def subjectsFeildDetailsProvider(self,student_id,term_id):
+        return {"grade": grade, "remarks": remarks}
+
+    def subjectsFeildDetailsProvider(self, student_id, term_id):
         def position(num):
             if num % 10 == 1:
                 txt = "st"
@@ -83,7 +85,7 @@ class report():
             return f"{num} {txt}"
 
         student = Student.objects.get(pk=student_id)
-        term = TermDetails.objects.get(pk = term_id)
+        term = TermDetails.objects.get(pk=term_id)
         class_level = student.classLevel
         class_level_students = Student.objects.filter(classLevel=class_level)
 
@@ -91,9 +93,7 @@ class report():
         for class_level_student in class_level_students:
             number_on_roll = number_on_roll + 1
 
-
-
-        student_courses = CourseStudent.objects.filter(student=student,term = term)
+        student_courses = CourseStudent.objects.filter(student=student, term=term)
         course_details = []
 
         for student_course in student_courses:
@@ -104,7 +104,6 @@ class report():
             course_students = CourseStudent.objects.filter(course=course)
             course_student_marks = []
 
-
             for course_student in course_students:
                 student_total_marks = course_student.class_score + course_student.exams_score
                 course_student_marks.append(student_total_marks)
@@ -112,8 +111,6 @@ class report():
             course_student_marks.sort()
             course_student_marks.reverse()
             positionnum = course_student_marks.index(total_marks) + 1
-
-
 
             course_data = {
                 "course_id": student_course.course.id,
@@ -127,10 +124,11 @@ class report():
             }
             course_details.append(course_data)
 
-        return {"course_details":course_details , "number_on_roll": number_on_roll}
-    def terminalreportProvider(self, student_id,Term_details_id):
+        return {"course_details": course_details, "number_on_roll": number_on_roll}
+
+    def terminalreportProvider(self, student_id, Term_details_id):
         student = Student.objects.get(pk=student_id)
-        term_details =self.getTermDetail(Term_details_id)
+        term_details = self.getTermDetail(Term_details_id)
         student_report_teachers_remarks = self.reportdetails(student_id, Term_details_id)
 
         response_data = {

@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-pe1$h&-@n47#swkwr#@mp$&ye60w)4v75n4h0bs%$)x4nqjrk#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.71', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.43.71', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -91,11 +91,14 @@ WSGI_APPLICATION = 'Cali_SMS_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Cali_SMS',
+        # 'NAME': 'Cali_SMS',
+        'NAME': 'cali_sms',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        # 'USER': 'root',
+        # 'PASSWORD': '24611',
         'USER': 'root',
-        'PASSWORD': '24611',
+        'PASSWORD': '2012@2021',
     }
 }
 
@@ -126,32 +129,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'API', 'management', 'django.log'),
-            # Specify the full path to the log file
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'API', 'management', 'django.log'),
+#             # Specify the full path to the log file
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 AUTH_USER_MODEL = 'API.CustomUser'  # Provide the correct path to your CustomUser model
 

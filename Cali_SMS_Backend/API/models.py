@@ -5,7 +5,6 @@ from django.db import models
 from .models_For_Finance import *
 
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, userType=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
@@ -30,6 +29,7 @@ class CustomUserManager(BaseUserManager):
 
     def create_proprietor(self, username, password=None, **extra_fields):
         return self.create_user(username, password, userType='proprietor', **extra_fields)
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
@@ -95,6 +95,7 @@ class School(models.Model):
     def __str__(self):
         return f"{self.name} id is {self.id} "
 
+
 class StaffSalary(models.Model):
     user = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
@@ -112,6 +113,7 @@ class TermDetails(models.Model):
     term_number_of_days = models.IntegerField(null=True, blank=True)
     other_term_details = models.CharField(max_length=200, blank=True)
     school = models.ForeignKey(School, null=True, on_delete=models.SET_NULL, blank=True)
+
     def save(self, *args, **kwargs):
         if self.id is None:
             super().save(*args, **kwargs)
@@ -120,8 +122,10 @@ class TermDetails(models.Model):
 
         else:
             super().save(*args, **kwargs)
+
     def __str__(self):
         return f" {self.term_name} id is {self.id}"
+
 
 class Course(models.Model):
     subject_name = models.CharField(max_length=200, null=True)
@@ -129,6 +133,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.subject_name
+
 
 class Department(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -138,7 +143,8 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class SchoolCommittees(models.Model):
     name = models.CharField(max_length=200, null=True)
     school = models.ForeignKey(School, null=True, on_delete=models.SET_NULL)
@@ -146,7 +152,7 @@ class SchoolCommittees(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class Fee(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -155,8 +161,11 @@ class Fee(models.Model):
     description = models.CharField(max_length=200, null=True)
     amount = models.FloatField(null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-    SchoolBodies_that_pay = models.ForeignKey(SchoolCommittees, null=True,on_delete=models.CASCADE)
-    paymentIntervals = models.CharField(max_length=15, choices=[('Daily','Daily'),('Weekly','Weekly'), ('Monthly','Monthly'),('Termly','Termly'),('Yearly','Yearly'),('Occationally','Occationally')], null=True, blank=True) 
+    SchoolBodies_that_pay = models.ForeignKey(SchoolCommittees, null=True, on_delete=models.CASCADE)
+    paymentIntervals = models.CharField(max_length=15,
+                                        choices=[('Daily', 'Daily'), ('Weekly', 'Weekly'), ('Monthly', 'Monthly'),
+                                                 ('Termly', 'Termly'), ('Yearly', 'Yearly'),
+                                                 ('Occationally', 'Occationally')], null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -174,27 +183,25 @@ class ClassLevel(models.Model):
         return self.name
 
 
-
-
 class Staff(models.Model):
     date_registered = models.DateTimeField(auto_now_add=True, null=True)
     surname = models.CharField(max_length=200, null=True)
     otherName = models.CharField(max_length=200, null=True)
     dateOfBirth = models.DateField(max_length=200, null=True)
     school = models.ManyToManyField(School)
-    school_committee = models.ForeignKey(SchoolCommittees,null=True,on_delete=models.CASCADE)
+    school_committee = models.ForeignKey(SchoolCommittees, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.otherName
 
 
 class ClassTeacherMap(models.Model):
-    date = models.DateField(auto_now_add=True, null=True,blank = True)
-    classLevel = models.ForeignKey(ClassLevel,null = True, blank = True ,on_delete=models.SET_NULL)
-    staff = models.ForeignKey(Staff,null = True, blank = True ,on_delete=models.SET_NULL)
+    date = models.DateField(auto_now_add=True, null=True, blank=True)
+    classLevel = models.ForeignKey(ClassLevel, null=True, blank=True, on_delete=models.SET_NULL)
+    staff = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return  f"{self.classLevel.name} {self.staff.surname}"
+        return f"{self.classLevel.name} {self.staff.surname}"
 
 
 class Student(models.Model):
@@ -216,13 +223,14 @@ class Student(models.Model):
     previous_school_attended = models.CharField(max_length=200, null=True, blank=True)
 
     admission_term = models.ForeignKey(TermDetails, null=True, blank=True, on_delete=models.SET_NULL)
-    admission_fees_payable = models.ForeignKey(Fee , null=True, on_delete=models.SET_NULL, blank=True)
-    admission_payments = models.FloatField(default = 0, null = True)
-    
-    school_committee = models.ForeignKey(SchoolCommittees,null = True,blank =True,on_delete=models.SET_NULL)
-    balance = models.FloatField(null=True, default = 0)
-    student_status = models.CharField(max_length=100 ,choices=[('Enrolling', 'Enrolling'), ('Completed', 'Completed'),('Left' , 'Left')], null = True, blank = True)
-    is_observer = models.BooleanField(null = False)
+    admission_fees_payable = models.ForeignKey(Fee, null=True, on_delete=models.SET_NULL, blank=True)
+    admission_payments = models.FloatField(default=0, null=True)
+
+    school_committee = models.ForeignKey(SchoolCommittees, null=True, blank=True, on_delete=models.SET_NULL)
+    balance = models.FloatField(null=True, default=0)
+    student_status = models.CharField(max_length=100, choices=[('Enrolling', 'Enrolling'), ('Completed', 'Completed'),
+                                                               ('Left', 'Left')], null=True, blank=True)
+    is_observer = models.BooleanField(null=False)
 
     def __str__(self):
         return f" {self.otherName} id is {self.id}"
@@ -284,11 +292,10 @@ class StudentFeesPayable(models.Model):
 # this table show all the payment the students have made to the school
 class StudentFeesPaid(models.Model):
     date = models.DateField(auto_now_add=True, null=True)
-    student = models.ForeignKey(Student, on_delete= models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     feeType = models.ForeignKey(Fee, on_delete=models.CASCADE)
-    term =   models.ForeignKey(TermDetails, on_delete=models.CASCADE) 
+    term = models.ForeignKey(TermDetails, on_delete=models.CASCADE)
     amount = models.FloatField(null=True, default=0)
-    
 
     def __str__(self):
         return f"{self.student} - {self.feeType} amount {self.amount}"
@@ -313,6 +320,7 @@ class ObserverAllowances(models.Model):
     feeType = models.ForeignKey(Fee, on_delete=models.CASCADE)
     amount = models.FloatField(null=True, default=0)
     term = models.ForeignKey(TermDetails, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.student} allowed to be observed on  {self.feeType}  at {self.amount} "
 
@@ -338,6 +346,7 @@ this contain all the details of the  kinds of payments the school makes to all i
 based on the debt they owe them
 """
 
+
 class Wage(models.Model):
     Date = models.DateField(auto_now=True, null=True)
     title = models.CharField(max_length=200, null=True)
@@ -348,7 +357,7 @@ class Wage(models.Model):
 
 class StaffWage(models.Model):
     staff = models.ForeignKey(Staff, null=True, on_delete=models.SET_NULL, blank=True)
-    WageType = models.ForeignKey(Wage, null=True, on_delete=models.SET_NULL,blank=True)
+    WageType = models.ForeignKey(Wage, null=True, on_delete=models.SET_NULL, blank=True)
     amount = models.FloatField(null=True)
 
     def __str__(self):
@@ -374,7 +383,7 @@ class PaymentPeriod(models.Model):
 
 class PeriodFinanceUpdate(models.Model):
     date = models.DateTimeField(auto_now_add=True, null=True)
-    period = models.ForeignKey(PaymentPeriod,null=True, on_delete=models.SET_NULL, blank=True)
+    period = models.ForeignKey(PaymentPeriod, null=True, on_delete=models.SET_NULL, blank=True)
     confirm = models.BooleanField(default=True)
 
     def __str__(self):
@@ -392,7 +401,7 @@ class PeriodFinanceUpdate(models.Model):
 
 class StaffSalariesPayable(models.Model):
     period = models.ForeignKey(PaymentPeriod, null=True, on_delete=models.SET_NULL, blank=True)
-    debt = models.ForeignKey(StaffWage,null=True, on_delete=models.SET_NULL, blank=True)
+    debt = models.ForeignKey(StaffWage, null=True, on_delete=models.SET_NULL, blank=True)
 
     def __str__(self):
         return f" {self.period.name}  debt of  kind {self.debt.amount} is payable"
@@ -404,4 +413,3 @@ class StaffSalaryPaid(models.Model):
 
     def __str(self):
         return f"{self.staff.surname}  has been paid  {self.amount} for {self.period.name} with id of {self.id}"
-

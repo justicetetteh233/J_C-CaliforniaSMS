@@ -14,15 +14,14 @@ from rest_framework import status, generics
 from rest_framework.permissions import AllowAny
 from .finance import *
 from .report import *
-from django.core.exceptions import ImproperlyConfigured
-from rest_framework.parsers import FileUploadParser
 from .serializer import *
 from .models import Proprietor
 # from math import *
 import subprocess
 from django.http import JsonResponse
-from django.core import management
-from rest_framework.decorators import api_view, parser_classes
+from django.utils import timezone
+
+current_time = timezone.now()
 
 
 # @api_view(['POST'])
@@ -61,7 +60,7 @@ def backup_database(request):
         os.makedirs(backup_directory, exist_ok=True)
 
         # Generate a timestamp for the backup file
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
 
         # Create a backup file name with timestamp
         backup_file = os.path.join(backup_directory, f"backup_{timestamp}.sql")
@@ -87,6 +86,7 @@ def backup_database(request):
 @csrf_exempt
 @require_POST
 def restore_database(request):
+    global backup_file
     try:
         backup_file = request.FILES['backupFile']
 
@@ -118,9 +118,9 @@ def restore_database(request):
         # Clean up: delete the uploaded backup file after restoration
         os.remove(backup_file_path)
 
-        return JsonResponse({'message': f'Database restored from backup.'})
+        return JsonResponse({'message': f'Database restored from {backup_file.name}.'})
     except Exception as e:
-        return JsonResponse({'error': f'Error restoring database from backup: {e}'}, status=500)
+        return JsonResponse({'error': f'Error restoring database from {backup_file.name}: {e}'}, status=500)
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -587,20 +587,19 @@ class ClassLevelDetailView(APIView):
 
 # List all fees and create a new fee
 class FeeListView(APIView):
-    def get_fees_in_a_class(self, class_id ):
-        classlevels = ClassLevel.objects.get(pk = class_id)
+    def get_fees_in_a_class(self, class_id):
+        classlevels = ClassLevel.objects.get(pk=class_id)
         classFees = classlevels.fees
-        serializer = FeeSerializer(classFees,many =True)
+        serializer = FeeSerializer(classFees, many=True)
         return Response(serializer.data)
 
-    def get(self, request,class_id = None):
+    def get(self, request, class_id=None):
         if class_id is not None:
-          return self.get_fees_in_a_class(class_id ) 
-        else: 
+            return self.get_fees_in_a_class(class_id)
+        else:
             fees = Fee.objects.all()
             serializer = FeeSerializer(fees, many=True)
             return Response(serializer.data)
-
 
     def post(self, request):
         serializer = FeeSerializer(data=request.data)
@@ -817,17 +816,18 @@ class SchoolFinanceViews(APIView):
         except Exception as e:
             return Response({"detail": "An error occurred: {}".format(str(e))},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+
 class StudentFeesPaidViews(APIView):
-    def get(self, request,term_id):
+    def get(self, request, term_id):
         Term = TermDetails.objects.get(pk=term_id)
         try:
-            term_fees_paid = StudentFeesPaid.objects.filter(term =Term )
+            term_fees_paid = StudentFeesPaid.objects.filter(term=Term)
             serializer = StudentFeesPaidSerializer(term_fees_paid, many=True)
             return Response(serializer.data)
-            
+
         except Term.DoesNotExist:
-            return Response({"error": "Term does not exist"}, status=status.HTTP_400_BAD_REQUEST )
+            return Response({"error": "Term does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"detail": "An error occurred: {}".format(str(e))},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -838,15 +838,14 @@ class StudentFeesPaidViews(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class StudentFeesPayableViews(APIView):
     def get(self, request):
         try:
             feespayable = StudentFeesPayable.objects.all()
-            serializer = StudentFeesPayableSerializer(feespayable,many =True)
+            serializer = StudentFeesPayableSerializer(feespayable, many=True)
             return Response(serializer.data)
         except Exception as e:
             return Response({"detail": "An error occurred: {}".format(str(e))},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
