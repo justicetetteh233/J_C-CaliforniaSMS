@@ -1,8 +1,8 @@
 # Python
 *.pyc
 *.pyo
-/Cali_SMS_Backend/API/migrations/*.py
-/Cali_SMS_Backend/Api/Migrations/backup/
+#/Cali_SMS_Backend/API/migrations/*.py
+#/Cali_SMS_Backend/Api/Migrations/backup/
 *.pyd
 *.pyc
 *.pyo
