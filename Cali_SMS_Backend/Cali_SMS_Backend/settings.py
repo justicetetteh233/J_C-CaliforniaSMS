@@ -91,14 +91,13 @@ WSGI_APPLICATION = 'Cali_SMS_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'Cali_SMS',
-        'NAME': 'cali_sms',
+        'NAME': 'Cali_SMS',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         # 'USER': 'root',
         # 'PASSWORD': '24611',
-        'USER': 'root',
-        'PASSWORD': '2012@2021',
+        'USER': 'clifford',
+        'PASSWORD': 'clifford',
     }
 }
 
