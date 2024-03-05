@@ -11,7 +11,7 @@
 *.log
 *.pot
 cali-frontend/node_modules/
-/Cali_SMS_Backend/venv/
+ /Cali_SMS_Backend/venv/
 
 # Django
 db.sqlite3
