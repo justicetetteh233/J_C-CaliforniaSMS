@@ -1,3 +1,8 @@
-from django.test import TestCase
+from finance import *
+
+
 
 # Create your tests here.
+tryFinance = SchoolFinance()
+
+tryFinance.getFeesPaidByStudents()

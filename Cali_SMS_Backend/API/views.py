@@ -20,6 +20,7 @@ from .models import Proprietor
 import subprocess
 from django.http import JsonResponse
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 current_time = timezone.now()
 
@@ -716,8 +717,8 @@ class CourseView(APIView):
 
 
 class TermDetailsListView(APIView):
-    def get(self, request):
-        term = TermDetails.objects.all()
+    def get(self, request,school_id):
+        term = TermDetails.objects.filter(school__id = school_id)
         serializer = TermDetailsSerializer(term, many=True)
         return Response(serializer.data)
 
@@ -819,18 +820,34 @@ class SchoolFinanceViews(APIView):
 
 
 class StudentFeesPaidViews(APIView):
-    def get(self, request, term_id):
-        Term = TermDetails.objects.get(pk=term_id)
-        try:
-            term_fees_paid = StudentFeesPaid.objects.filter(term=Term)
-            serializer = StudentFeesPaidSerializer(term_fees_paid, many=True)
-            return Response(serializer.data)
+    # def get(self, request, term_id):
+    #     Term = TermDetails.objects.get(pk=term_id)
+    #     try:
+    #         term_fees_paid = StudentFeesPaid.objects.filter(term=Term)
+    #         serializer = StudentFeesPaidSerializer(term_fees_paid, many=True)
+    #         return Response(serializer.data)
 
-        except Term.DoesNotExist:
-            return Response({"error": "Term does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({"detail": "An error occurred: {}".format(str(e))},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    #     except Term.DoesNotExist:
+    #         return Response({"error": "Term does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+    #     except Exception as e:
+    #         return Response({"detail": "An error occurred: {}".format(str(e))},
+    #                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # def get(self, request, term_id=1,student_name=None,date="2024-03-19",classes_id = None):
+    #     finance = SchoolFinance()
+    #     data = finance.getFeesPaidByStudents(term_id=term_id,student_name=student_name,date=date,classes_id = classes_id)
+    #     return Response(data, status=status.HTTP_200_OK)
+
+
+    def get(self, request, term_id=None, student_name=None, date=None, classes_id=None):
+        finance = SchoolFinance()
+        data = finance.getFeesPaidByStudents(term_id=term_id, student_name=student_name, date=date, classes_id=classes_id)
+        paginator = Paginator(data, 10)  # Assuming you want 10 records per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        return Response(page_obj.object_list, status=status.HTTP_200_OK)
+    
 
     def post(self, request):
         serializer = StudentFeesPaidSerializer(data=request.data)

@@ -94,10 +94,10 @@ DATABASES = {
         'NAME': 'Cali_SMS',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        # 'USER': 'root',
-        # 'PASSWORD': '24611',
-        'USER': 'clifford',
-        'PASSWORD': 'clifford',
+        'USER': 'root',
+        'PASSWORD': '24611',
+        # 'USER': 'clifford',
+        # 'PASSWORD': 'clifford',
     }
 }
 

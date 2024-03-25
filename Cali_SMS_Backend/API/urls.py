@@ -80,7 +80,7 @@ urlpatterns = [
          name='change-scores-by-course'),
 
     # getting list of terms
-    path('terms/', TermDetailsListView.as_view(), name='term-list'),
+    path('terms/<int:school_id>/', TermDetailsListView.as_view(), name='term-list'),
 
     # getting student financial report
     path('studentfinancialstatement/<int:term_id>/<int:student_id>/', SchoolFinanceViews.as_view(), name='total-fees'),
@@ -90,9 +90,10 @@ urlpatterns = [
     path('restore/', views.restore_database, name='restore_database'),
 
     # getting list of student fees paid by term
-    path('studentfeesforterm/<int:term_id>/', StudentFeesPaidViews.as_view(), name='totalfees'),
-    path('studentfeespayment/',StudentFeesPaidViews.as_view(),name='paymentofschoolfeesbystudents'),
+#     path('studentfeesforterm/<int:term_id>/<str:date>/<str:student_name>/<int:classes_id>/', StudentFeesPaidViews.as_view(), name='totalfees'),
+    path('studentfeespayment/<int:term_id>/<int:classes_id>/',StudentFeesPaidViews.as_view(),name='paymentofschoolfeesbystudents'),
    
    #getting student fees payable
-   path('studentfeespayable/',StudentFeesPayableViews.as_view(),name = 'studentfeespayable')
+
+#    <str:date>/<str:student_name>/<int:classes_id>/<str:student_name>/
 ]

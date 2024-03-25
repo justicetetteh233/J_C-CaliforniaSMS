@@ -99,3 +99,41 @@ class SchoolFinance():
         ]
 
         return responsedata
+    
+    """this User story is as a proprietor I want to  get fees payment based on the following 
+    1 -> classes 
+    2 -> Name of the studetent 
+    3 -> date 
+    4 -> term
+    5 -> feeType 
+    """
+
+
+    def getFeesPaidByStudents(self, term_id=None, student_name=None, date=None, classes_id=None):
+        if term_id is not None:
+            term_fees = StudentFeesPaid.objects.filter(term=term_id)
+            
+            if student_name is not None:
+                term_fees = term_fees.filter(student__surname__icontains=student_name)
+                term_fees = term_fees.values('id','student__id','date', 'student__surname', 'feeType__name', 'amount')
+                return term_fees
+            
+            
+            if date is not None:
+                term_fees = term_fees.filter(date = date)
+                term_fees = term_fees.values('id','student__id','date', 'student__surname', 'feeType__name', 'amount')
+                return term_fees
+            
+            
+            if classes_id is not None:
+                term_fees = term_fees.filter(student__classLevel__id = classes_id)
+                term_fees = term_fees.values('id','student__id','date', 'student__surname', 'feeType__name', 'amount')
+                return term_fees
+            
+            return  term_fees.values('id','student__id','date','student__surname','feeType__name','amount')
+                    
+        else:
+            term_fees = StudentFeesPaid.objects.all()
+            return term_fees.values('id','student__id','date','student__surname','feeType__name','amount')
+
+                    
